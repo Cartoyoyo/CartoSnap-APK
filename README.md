@@ -9,7 +9,7 @@
 **Appareil photo de terrain qui nomme, annote et géoréférence chaque cliché en Lambert 93, puis l'exporte prêt à ouvrir dans QGIS**
 
 [![Flutter](https://img.shields.io/badge/Flutter-Dart%20%5E3.9.2-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-[![Version](https://img.shields.io/badge/version-1.0-blue)](pubspec.yaml)
+[![Version](https://img.shields.io/badge/version-1.0.1-blue)](pubspec.yaml)
 [![Android](https://img.shields.io/badge/Android-APK-3DDC84?logo=android&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-APK/)
 [![iPhone](https://img.shields.io/badge/iPhone-version%20web-lightgrey?logo=safari&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-web/)
 [![CRS](https://img.shields.io/badge/CRS-EPSG%3A2154%20Lambert%2093-orange)](lib/services/coordinate_converter.dart)
@@ -138,7 +138,7 @@ flutter test
 
 <p align="center"><img src="docs/screenshots/carte_html.jpg" width="760" alt="Carte HTML dans un navigateur"/></p>
 
-**7. Imprimer un rapport PDF.** Dans la Carte HTML, *Exporter en PDF* → titre, format, orientation → *Préparer* → *Imprimer / Enregistrer en PDF*. Le système produit le PDF (Android : *Enregistrer au format PDF* ; iPhone : *Partager → Imprimer*, puis partager l'aperçu ; PC : *Microsoft Print to PDF*). Dans la fenêtre d'impression du PC, décochez *En-têtes et pieds de page* pour ne pas imprimer la date et le chemin du fichier.
+**7. Imprimer un rapport PDF.** Dans la Carte HTML, *Exporter en PDF* → titre, format, orientation → *Préparer* → *Imprimer / Enregistrer en PDF*. Le système produit le PDF (Android : *Enregistrer au format PDF* ; iPhone : *Partager → Imprimer*, puis partager l'aperçu ; PC : *Microsoft Print to PDF*). Les en-têtes et pieds de page du navigateur (date, chemin du fichier) ne sont pas imprimés.
 
 <p align="center"><img src="docs/screenshots/export_pdf.jpg" width="760" alt="Fenêtre Exporter en PDF"/></p>
 
@@ -317,6 +317,7 @@ d2 --layout elk architecture.d2 architecture.svg
 ## Changelog
 
 |---------|-------|
+| **1.0.1 — 04/10/2026** | Rapport PDF de la Carte HTML sans les en-têtes et pieds de page du navigateur (date, titre, chemin du fichier) : marges d'impression nulles, marge de 10 mm recréée dans la page |
 | **1.0 — 04/10/2026** | Première version stable de **CartoSnap** (ex LambertSnap) : Android (APK) et iPhone (version web Safari) ; photos géoréférencées Lambert 93, annotation, galerie et carte des photos, exports CSV / ZIP / projet QGIS / Carte HTML avec export PDF ; README illustré |
 | **0.97.1 — 04/10/2026** | Adresse courte quand il n'y a pas de rue (lieu-dit ou commune au lieu de l'adresse complète « Minier, Châtel-Montagne, Vichy, Allier, … ») ; les adresses trop longues des photos déjà prises sont raccourcies à l'affichage et dans les exports |
 | **0.97 — 04/10/2026** | Carte HTML : bouton **Exporter en PDF** (titre personnalisable, A4 ou A3, portrait ou paysage ; page 1 = la carte telle qu'affichée, pages suivantes = mosaïques de 6 photos avec légendes Lambert 93), enregistré en PDF par la fenêtre d'impression du téléphone ou du PC — fond OpenStreetMap standard retiré (OSM France par défaut) |
