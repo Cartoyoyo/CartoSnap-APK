@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>CartoSnap Android</title>
+  <meta name="description" content="Télécharger CartoSnap pour Android : appareil photo de terrain avec coordonnées Lambert 93">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+    :root {
+      --bg: #0f1220;
+      --surface: #1a1f33;
+      --border: #2a3150;
+      --text: #e8ebf5;
+      --muted: #9aa3bf;
+      --accent: #2f80ed;
+      --accent-strong: #1f6fe0;
+      --ok: #27ae60;
+      --warn: #f2994a;
+    }
+    @media (prefers-color-scheme: light) {
+      :root:not([data-theme="dark"]) {
+        --bg: #f5f7fb;
+        --surface: #ffffff;
+        --border: #dde3ef;
+        --text: #1b2033;
+        --muted: #5b6480;
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+      font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    }
+    main { max-width: 860px; margin: 0 auto; padding: 32px 16px 64px; }
+    .hero { text-align: center; padding: 16px 0 8px; }
+    .hero img { width: 96px; height: 96px; border-radius: 22px; box-shadow: 0 8px 24px rgba(0,0,0,.25); }
+    .hero h1 { margin: 16px 0 4px; font-size: 2rem; letter-spacing: .5px; }
+    .hero p { margin: 0 auto; max-width: 560px; color: var(--muted); }
+    .download {
+      display: inline-flex; align-items: center; gap: 10px;
+      margin: 24px 0 8px; padding: 16px 28px; border-radius: 14px;
+      background: var(--accent); color: #fff; text-decoration: none;
+      font-size: 1.15rem; font-weight: 600;
+      box-shadow: 0 6px 18px rgba(47,128,237,.35);
+    }
+    .download:hover, .download:focus-visible { background: var(--accent-strong); }
+    .download svg { width: 22px; height: 22px; }
+    .meta { color: var(--muted); font-size: .9rem; }
+    .secondary { display: block; margin-top: 10px; color: var(--accent); }
+    .card {
+      background: var(--surface); border: 1px solid var(--border);
+      border-radius: 14px; padding: 20px 22px; margin-top: 28px;
+    }
+    .card h2 { margin: 0 0 12px; font-size: 1.2rem; }
+    ol.steps { margin: 0; padding-left: 1.3rem; }
+    ol.steps li { margin: 6px 0; }
+    .note { border-left: 4px solid var(--warn); padding: 8px 12px; margin-top: 14px; color: var(--muted); font-size: .95rem; }
+    details.readme { margin-top: 28px; }
+    details.readme > summary {
+      cursor: pointer; font-weight: 600; font-size: 1.1rem;
+      padding: 14px 18px; background: var(--surface);
+      border: 1px solid var(--border); border-radius: 14px;
+    }
+    #readme { padding: 8px 4px; overflow-wrap: anywhere; }
+    #readme img { max-width: 100%; }
+    #readme table { border-collapse: collapse; display: block; overflow-x: auto; }
+    #readme th, #readme td { border: 1px solid var(--border); padding: 6px 10px; vertical-align: top; }
+    #readme pre { background: var(--surface); padding: 12px; border-radius: 10px; overflow-x: auto; }
+    #readme code { font-size: .9em; }
+    #readme a { color: var(--accent); }
+    footer { margin-top: 40px; text-align: center; color: var(--muted); font-size: .85rem; }
+  </style>
+</head>
+<body>
+<main>
+  <section class="hero">
+    <img src="assets/icon/app_icon.png" alt="Icône CartoSnap">
+    <h1>CartoSnap</h1>
+    <p>Appareil photo de terrain : chaque photo est nommée, datée et géoréférencée en Lambert 93, puis exportée prête à ouvrir dans QGIS.</p>
+
+    <a class="download" id="download"
+       href="https://github.com/Cartoyoyo/CartoSnap-APK/releases/latest/download/CartoSnap.apk">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"/><path d="m7 10 5 5 5-5"/><path d="M5 21h14"/></svg>
+      Télécharger l'APK Android
+    </a>
+    <div class="meta" id="meta">Dernière version · Android 7 et plus</div>
+    <a class="secondary" href="https://cartoyoyo.github.io/CartoSnap-web/">Sur iPhone : utiliser la version web dans Safari</a>
+  </section>
+
+  <section class="card">
+    <h2>Installer sur Android</h2>
+    <ol class="steps">
+      <li>Ouvrez cette page <strong>sur le téléphone</strong> et touchez <strong>Télécharger l'APK Android</strong>.</li>
+      <li>Ouvrez le fichier <code>CartoSnap.apk</code> depuis la notification de téléchargement.</li>
+      <li>Si Android le demande, autorisez l'installation depuis votre navigateur (« Sources inconnues »), puis touchez <strong>Installer</strong>.</li>
+      <li>Au premier lancement, acceptez l'accès à l'appareil photo et à la position.</li>
+    </ol>
+    <p class="note">Si une ancienne version (LambertSnap) est installée et qu'Android refuse la mise à jour, désinstallez-la d'abord. Les photos déjà prises restent dans <code>DCIM/LambertSnap</code>.</p>
+  </section>
+
+  <details class="readme" open>
+    <summary>Documentation (README)</summary>
+    <div id="readme">Chargement…</div>
+  </details>
+
+  <footer>CartoSnap · <a href="https://www.linkedin.com/in/ylaloux/" style="color:inherit">Y. Laloux</a></footer>
+</main>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/15.0.12/marked.min.js"></script>
+<script>
+  // Documentation : le README.md du dépôt, rendu ici
+  fetch('README.md')
+    .then(r => r.ok ? r.text() : Promise.reject(r.status))
+    .then(md => { document.getElementById('readme').innerHTML = marked.parse(md); })
+    .catch(() => {
+      document.getElementById('readme').innerHTML =
+        '<p><a href="README.md">Ouvrir le README</a></p>';
+    });
+
+  // Version et taille de la dernière Release (API publique GitHub)
+  fetch('https://api.github.com/repos/Cartoyoyo/CartoSnap-APK/releases/latest')
+    .then(r => r.ok ? r.json() : Promise.reject(r.status))
+    .then(rel => {
+      const apk = (rel.assets || []).find(a => a.name.endsWith('.apk'));
+      const size = apk ? ` · ${Math.round(apk.size / 1048576)} Mo` : '';
+      const date = new Date(rel.published_at).toLocaleDateString('fr-FR');
+      document.getElementById('meta').textContent =
+        `${rel.name || rel.tag_name} · publiée le ${date}${size} · Android 7 et plus`;
+    })
+    .catch(() => {});
+</script>
+</body>
+</html>
