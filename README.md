@@ -9,7 +9,7 @@
 **Appareil photo de terrain qui nomme, annote et géoréférence chaque cliché en Lambert 93, puis l'exporte prêt à ouvrir dans QGIS**
 
 [![Flutter](https://img.shields.io/badge/Flutter-Dart%20%5E3.9.2-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-[![Version](https://img.shields.io/badge/version-0.95-blue)](pubspec.yaml)
+[![Version](https://img.shields.io/badge/version-0.96-blue)](pubspec.yaml)
 [![Platform](https://img.shields.io/badge/plateforme-Android-3DDC84?logo=android&logoColor=white)](android/)
 [![CRS](https://img.shields.io/badge/CRS-EPSG%3A2154%20Lambert%2093-orange)](lib/services/coordinate_converter.dart)
 [![Docs](https://img.shields.io/badge/docs-FR%20%7C%20EN%20%7C%20ES%20%7C%20PT%20%7C%20DE-lightgrey)](#français)
@@ -38,9 +38,9 @@ Fini les photos de chantier à relocaliser à la main : visez, déclenchez, et l
 - **Géocodage inverse** : adresse via Nominatim (OSM), limitée à une requête par seconde et déclenchée après 3 s de position stable.
 - **Galerie** : grille ou liste, sélection multiple, partage, suppression, vue plein écran avec coordonnées Lambert 93.
 - **Carte des photos** : vignettes regroupées par proximité, échelle affichée et forçable (1/250 à 1/25 000), export JPEG au format A4 (portrait ou paysage, 100 dpi) avec titre et commentaire.
-- **Exports** : CSV (`;`, UTF-8 avec BOM pour Excel), ZIP photos + CSV, ZIP QGIS (GeoJSON Lambert 93 + projet `.qgz` et `.qgs` + `photos/`), ZIP complet.
+- **Exports** : CSV (`;`, UTF-8 avec BOM pour Excel), ZIP photos + CSV, ZIP QGIS (GeoJSON Lambert 93 + projet `.qgz` et `.qgs` + `photos/`), ZIP complet, **Carte HTML** (un seul fichier `.html` à ouvrir dans n'importe quel navigateur : carte OSM / photo aérienne IGN, marqueurs, coordonnées Lambert 93 et photos intégrées).
 - **Projet QGIS prêt à l'emploi** : chaque photo affichée **en vignette** sur la carte (point bleu = position exacte), dispersion des photos superposées, étiquette = nom du fichier, info-bulle, action « Ouvrir la photo », chemins relatifs, fond de carte du réglage. Vérifié en chargeant le projet généré dans QGIS 3.44.
-- **Fond de carte** : OpenStreetMap ou OpenStreetMap France (réglage), appliqué à la mini-carte, à la carte des photos, à l'export JPEG A4 et au projet QGIS.
+- **Fond de carte** : OpenStreetMap, OpenStreetMap France ou OpenTopoMap (topographique) (réglage), appliqué à la mini-carte, à la carte des photos, à l'export JPEG A4 et au projet QGIS.
 - **Réparation des anciennes photos** (Galerie → ⋮) : reconversion en JPEG des PNG enregistrés en `.jpg`, EXIF GPS réécrit, noms de fichiers renommés avec les X/Y corrigés, position factice de Paris effacée.
 - **EXIF GPS** : latitude, longitude, altitude, cap, date et coordonnées Lambert 93 (description) écrits dans chaque photo géolocalisée, y compris après bandeau ou annotation (réencodage JPEG qualité 92).
 - **Pas de position inventée** : si le GPS est coupé ou refusé, la photo est enregistrée sans coordonnées (`CartoSnap_<date>.jpg`), le témoin passe au rouge, et les exports laissent ses colonnes X/Y vides (géométrie nulle dans le GeoJSON). Le suivi reprend seul quand le GPS est réactivé.
@@ -131,7 +131,7 @@ CartoSnap is a Flutter field camera app that geotags photos and computes their *
 - **Reverse geocoding** through Nominatim (OSM), 1 request per second.
 - **Gallery and photo map**: clustering, forced scale, A4 JPEG map export at 100 dpi.
 - **Compass heading** stored in EXIF (magnetic north on Android, true north on iOS) and **lens selector** (0.5x / 1x / tele) when several rear cameras are exposed.
-- **Exports**: CSV (`;`, UTF-8 BOM), ZIP photos + CSV, QGIS ZIP (GeoJSON + `.qgz`/`.qgs` + `photos/`, photos shown as thumbnails), full ZIP.
+- **Exports**: CSV (`;`, UTF-8 BOM), ZIP photos + CSV, QGIS ZIP (GeoJSON + `.qgz`/`.qgs` + `photos/`, photos shown as thumbnails), full ZIP, **HTML map** (single `.html` file: OSM / IGN aerial map, markers, Lambert 93 coordinates and embedded photos).
 - **Basemap setting**: OpenStreetMap or OpenStreetMap France, used by every map and the QGIS project.
 - **Old photo repair** (Gallery → ⋮): PNG-in-`.jpg` re-encoded, GPS EXIF rewritten, file names fixed, Paris demo positions cleared.
 - **GPS EXIF** in every geotagged photo, banner and annotation included (JPEG re-encoding, quality 92).
@@ -239,6 +239,7 @@ d2 --layout elk architecture.d2 architecture.svg
 ## Changelog
 
 |---------|-------|
+| **0.96 — 04/10/2026** | Nouvel export **Carte HTML** : un seul fichier `.html` (carte Leaflet, fonds OSM / OSM France / OpenTopoMap + photo aérienne IGN, marqueurs numérotés, popups avec X/Y Lambert 93, photos réduites à 1600 px intégrées, visionneuse plein écran, grille des photos) — viseur fidèle à la photo sur Android et web — bandeau GPS : ouverture des réglages (Android) ou guide Safari (web) — pastilles d'objectif en colonne à gauche — fond de carte **OpenTopoMap** (topographique) dans les réglages — compilation de l'APK par GitHub Actions |
 | **0.95 — 04/10/2026 (branche `web`)** | Renommage LambertSnap → CartoSnap (nom affiché, EXIF, exports, dossier `DCIM/CartoSnap` ; la réparation des anciennes photos LambertSnap est conservée) — version web utilisable sur iPhone via Safari : photos stockées dans le navigateur (IndexedDB), partage iOS, export ZIP/CSV/QGIS, installation sur l'écran d'accueil |
 | **0.94 — 04/10/2026** | Correction de l'exposant `n` de la projection Lambert 93 (erreur jusqu'à ~300 m) — photos annotées ou avec bandeau enregistrées en vrai JPEG avec EXIF GPS — suppression de la position factice de Paris quand le GPS est coupé, exports sans coordonnées pour ces photos, reprise automatique du suivi — chemin `assets/icon/` corrigé dans `pubspec.yaml` — tests unitaires (conversion, JPEG, EXIF, exports sans GPS) — README réécrit — diagramme `architecture.d2` — boussole branchée (cap EXIF) — sélecteur d'objectif — canal MediaScanner Android — suffixe Portrait/Paysage de l'export carte — fuite du dialogue d'échelle corrigée — version unique `appVersion` — réglage « Horodatage » appliqué au bandeau et au canevas — fond de carte OSM / OSM France branché partout — projet QGIS en `.qgz` avec photos en vignettes — réparation des anciennes photos — GPSTimeStamp EXIF en UTC — test de l'écran de démarrage corrigé |
 | **0.93** | Version affichée dans l'application au moment de l'analyse |
