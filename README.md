@@ -36,7 +36,14 @@
 | Résultat : la Carte HTML ouverte dans un navigateur |
 |:---:|
 | ![Carte HTML](docs/screenshots/carte_html.jpg) |
-| Un seul fichier `.html` à partager : carte (OSM France, OpenTopoMap, photo aérienne IGN), marqueurs numérotés,<br>coordonnées Lambert 93, photos intégrées et bouton **Exporter en PDF** (A4/A3, portrait/paysage) |
+| Un seul fichier `.html` à partager : carte (OSM France, OpenTopoMap, photo aérienne IGN), marqueurs numérotés,<br>coordonnées Lambert 93, photos intégrées et bouton **Exporter en PDF** |
+
+| Exporter en PDF | Rapport — page 1 : la carte | Rapport — page 2 : 6 photos par page |
+|:---:|:---:|:---:|
+| ![Fenêtre Exporter en PDF](docs/screenshots/export_pdf.jpg) | [![Rapport PDF page 1](docs/screenshots/rapport_pdf_page1.jpg)](docs/exemple_rapport_cartosnap.pdf) | [![Rapport PDF page 2](docs/screenshots/rapport_pdf_page2.jpg)](docs/exemple_rapport_cartosnap.pdf) |
+| Titre, A4 ou A3,<br>portrait ou paysage | Vue de la carte, marqueurs<br>numérotés, échelle | Photo, date, X/Y Lambert 93,<br>adresse, altitude, précision |
+
+📄 [Voir le rapport PDF d'exemple](docs/exemple_rapport_cartosnap.pdf) (A4 portrait, 2 pages)
 
 **Télécharger :** [APK Android](https://cartoyoyo.github.io/CartoSnap-APK/) · [Version web pour iPhone (Safari)](https://cartoyoyo.github.io/CartoSnap-web/)
 
@@ -131,9 +138,15 @@ flutter test
 
 <p align="center"><img src="docs/screenshots/carte_html.jpg" width="760" alt="Carte HTML dans un navigateur"/></p>
 
-**7. Ouvrir dans QGIS.** Décompressez le ZIP QGIS et ouvrez le fichier `.qgz` (ou `.qgs`).
+**7. Imprimer un rapport PDF.** Dans la Carte HTML, *Exporter en PDF* → titre, format, orientation → *Préparer* → *Imprimer / Enregistrer en PDF*. Le système produit le PDF (Android : *Enregistrer au format PDF* ; iPhone : *Partager → Imprimer*, puis partager l'aperçu ; PC : *Microsoft Print to PDF*). Dans la fenêtre d'impression du PC, décochez *En-têtes et pieds de page* pour ne pas imprimer la date et le chemin du fichier.
 
-**8. Anciennes photos.** Sur Android, une fois après la mise à jour : Galerie → ⋮ → *Réparer les anciennes photos*.
+<p align="center"><img src="docs/screenshots/export_pdf.jpg" width="760" alt="Fenêtre Exporter en PDF"/></p>
+
+<p align="center"><a href="docs/exemple_rapport_cartosnap.pdf"><img src="docs/screenshots/rapport_pdf_page1.jpg" width="300" alt="Rapport PDF page 1"/></a> &nbsp; <a href="docs/exemple_rapport_cartosnap.pdf"><img src="docs/screenshots/rapport_pdf_page2.jpg" width="300" alt="Rapport PDF page 2"/></a><br><a href="docs/exemple_rapport_cartosnap.pdf">Rapport PDF d'exemple</a> (A4 portrait : la carte, puis les photos avec leurs coordonnées)</p>
+
+**8. Ouvrir dans QGIS.** Décompressez le ZIP QGIS et ouvrez le fichier `.qgz` (ou `.qgs`).
+
+**9. Anciennes photos.** Sur Android, une fois après la mise à jour : Galerie → ⋮ → *Réparer les anciennes photos*.
 
 ### Contenu des exports
 
