@@ -9,7 +9,7 @@
 **Appareil photo de terrain qui nomme, annote et géoréférence chaque cliché en Lambert 93, puis l'exporte prêt à ouvrir dans QGIS**
 
 [![Flutter](https://img.shields.io/badge/Flutter-Dart%20%5E3.9.2-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-[![Version](https://img.shields.io/badge/version-0.97-blue)](pubspec.yaml)
+[![Version](https://img.shields.io/badge/version-1.0-blue)](pubspec.yaml)
 [![Android](https://img.shields.io/badge/Android-APK-3DDC84?logo=android&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-APK/)
 [![iPhone](https://img.shields.io/badge/iPhone-version%20web-lightgrey?logo=safari&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-web/)
 [![CRS](https://img.shields.io/badge/CRS-EPSG%3A2154%20Lambert%2093-orange)](lib/services/coordinate_converter.dart)
@@ -304,6 +304,8 @@ d2 --layout elk architecture.d2 architecture.svg
 ## Changelog
 
 |---------|-------|
+| **1.0 — 04/10/2026** | Première version stable de **CartoSnap** (ex LambertSnap) : Android (APK) et iPhone (version web Safari) ; photos géoréférencées Lambert 93, annotation, galerie et carte des photos, exports CSV / ZIP / projet QGIS / Carte HTML avec export PDF ; README illustré |
+| **0.97.1 — 04/10/2026** | Adresse courte quand il n'y a pas de rue (lieu-dit ou commune au lieu de l'adresse complète « Minier, Châtel-Montagne, Vichy, Allier, … ») ; les adresses trop longues des photos déjà prises sont raccourcies à l'affichage et dans les exports |
 | **0.97 — 04/10/2026** | Carte HTML : bouton **Exporter en PDF** (titre personnalisable, A4 ou A3, portrait ou paysage ; page 1 = la carte telle qu'affichée, pages suivantes = mosaïques de 6 photos avec légendes Lambert 93), enregistré en PDF par la fenêtre d'impression du téléphone ou du PC — fond OpenStreetMap standard retiré (OSM France par défaut) |
 | **0.96 — 04/10/2026** | Nouvel export **Carte HTML** : un seul fichier `.html` (carte Leaflet, fonds OSM France / OpenTopoMap + photo aérienne IGN, marqueurs numérotés, popups avec X/Y Lambert 93, photos réduites à 1600 px intégrées, visionneuse plein écran, grille des photos) — viseur fidèle à la photo sur Android et web — bandeau GPS : ouverture des réglages (Android) ou guide Safari (web) — pastilles d'objectif en colonne à gauche — fond de carte **OpenTopoMap** (topographique) dans les réglages, fond OpenStreetMap standard retiré (OSM France par défaut) — compilation de l'APK par GitHub Actions |
 | **0.95 — 04/10/2026 (branche `web`)** | Renommage LambertSnap → CartoSnap (nom affiché, EXIF, exports, dossier `DCIM/CartoSnap` ; la réparation des anciennes photos LambertSnap est conservée) — version web utilisable sur iPhone via Safari : photos stockées dans le navigateur (IndexedDB), partage iOS, export ZIP/CSV/QGIS, installation sur l'écran d'accueil |
