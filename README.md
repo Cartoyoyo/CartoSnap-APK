@@ -9,10 +9,36 @@
 **Appareil photo de terrain qui nomme, annote et géoréférence chaque cliché en Lambert 93, puis l'exporte prêt à ouvrir dans QGIS**
 
 [![Flutter](https://img.shields.io/badge/Flutter-Dart%20%5E3.9.2-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-[![Version](https://img.shields.io/badge/version-0.96-blue)](pubspec.yaml)
-[![Platform](https://img.shields.io/badge/plateforme-Android-3DDC84?logo=android&logoColor=white)](android/)
+[![Version](https://img.shields.io/badge/version-0.97-blue)](pubspec.yaml)
+[![Android](https://img.shields.io/badge/Android-APK-3DDC84?logo=android&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-APK/)
+[![iPhone](https://img.shields.io/badge/iPhone-version%20web-lightgrey?logo=safari&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-web/)
 [![CRS](https://img.shields.io/badge/CRS-EPSG%3A2154%20Lambert%2093-orange)](lib/services/coordinate_converter.dart)
 [![Docs](https://img.shields.io/badge/docs-FR%20%7C%20EN%20%7C%20ES%20%7C%20PT%20%7C%20DE-lightgrey)](#français)
+
+</div>
+
+---
+
+<div align="center">
+
+## Aperçu rapide · Quick Overview
+
+| 1 — Viser | 2 — Annoter | 3 — Retrouver |
+|:---:|:---:|:---:|
+| ![Viseur](docs/screenshots/viseur.jpg) | ![Annotation](docs/screenshots/annotation.jpg) | ![Galerie](docs/screenshots/galerie.jpg) |
+| Position GPS, adresse et X/Y Lambert 93<br>en direct, mini-carte et objectifs | Stylo 12 couleurs, commentaire<br>ajouté sous la photo | Galerie de l'appli :<br>adresse et date de chaque photo |
+
+| 4 — Vérifier | 5 — Situer | 6 — Exporter |
+|:---:|:---:|:---:|
+| ![Photo](docs/screenshots/photo_detail.jpg) | ![Carte des photos](docs/screenshots/carte_photos.jpg) | ![Export](docs/screenshots/export_donnees.jpg) |
+| Bandeau incrusté, X/Y, altitude,<br>précision et cap enregistrés | Carte des photos (vignettes)<br>et export JPEG de la carte | CSV, ZIP, projet QGIS<br>ou Carte HTML |
+
+| Résultat : la Carte HTML ouverte dans un navigateur |
+|:---:|
+| ![Carte HTML](docs/screenshots/carte_html.jpg) |
+| Un seul fichier `.html` à partager : carte (OSM France, OpenTopoMap, photo aérienne IGN), marqueurs numérotés,<br>coordonnées Lambert 93, photos intégrées et bouton **Exporter en PDF** (A4/A3, portrait/paysage) |
+
+**Télécharger :** [APK Android](https://cartoyoyo.github.io/CartoSnap-APK/) · [Version web pour iPhone (Safari)](https://cartoyoyo.github.io/CartoSnap-web/)
 
 </div>
 
@@ -38,9 +64,9 @@ Fini les photos de chantier à relocaliser à la main : visez, déclenchez, et l
 - **Géocodage inverse** : adresse via Nominatim (OSM), limitée à une requête par seconde et déclenchée après 3 s de position stable.
 - **Galerie** : grille ou liste, sélection multiple, partage, suppression, vue plein écran avec coordonnées Lambert 93.
 - **Carte des photos** : vignettes regroupées par proximité, échelle affichée et forçable (1/250 à 1/25 000), export JPEG au format A4 (portrait ou paysage, 100 dpi) avec titre et commentaire.
-- **Exports** : CSV (`;`, UTF-8 avec BOM pour Excel), ZIP photos + CSV, ZIP QGIS (GeoJSON Lambert 93 + projet `.qgz` et `.qgs` + `photos/`), ZIP complet, **Carte HTML** (un seul fichier `.html` à ouvrir dans n'importe quel navigateur : carte OSM / photo aérienne IGN, marqueurs, coordonnées Lambert 93 et photos intégrées).
+- **Exports** : CSV (`;`, UTF-8 avec BOM pour Excel), ZIP photos + CSV, ZIP QGIS (GeoJSON Lambert 93 + projet `.qgz` et `.qgs` + `photos/`), ZIP complet, **Carte HTML** (un seul fichier `.html` à ouvrir dans n'importe quel navigateur : carte OSM France / OpenTopoMap / photo aérienne IGN, marqueurs, coordonnées Lambert 93, photos intégrées, et bouton **Exporter en PDF** A4/A3 portrait/paysage avec titre).
 - **Projet QGIS prêt à l'emploi** : chaque photo affichée **en vignette** sur la carte (point bleu = position exacte), dispersion des photos superposées, étiquette = nom du fichier, info-bulle, action « Ouvrir la photo », chemins relatifs, fond de carte du réglage. Vérifié en chargeant le projet généré dans QGIS 3.44.
-- **Fond de carte** : OpenStreetMap, OpenStreetMap France ou OpenTopoMap (topographique) (réglage), appliqué à la mini-carte, à la carte des photos, à l'export JPEG A4 et au projet QGIS.
+- **Fond de carte** : OpenStreetMap France ou OpenTopoMap (topographique) (réglage), appliqué à la mini-carte, à la carte des photos, à l'export JPEG A4 et au projet QGIS.
 - **Réparation des anciennes photos** (Galerie → ⋮) : reconversion en JPEG des PNG enregistrés en `.jpg`, EXIF GPS réécrit, noms de fichiers renommés avec les X/Y corrigés, position factice de Paris effacée.
 - **EXIF GPS** : latitude, longitude, altitude, cap, date et coordonnées Lambert 93 (description) écrits dans chaque photo géolocalisée, y compris après bandeau ou annotation (réencodage JPEG qualité 92).
 - **Pas de position inventée** : si le GPS est coupé ou refusé, la photo est enregistrée sans coordonnées (`CartoSnap_<date>.jpg`), le témoin passe au rouge, et les exports laissent ses colonnes X/Y vides (géométrie nulle dans le GeoJSON). Le suivi reprend seul quand le GPS est réactivé.
@@ -55,9 +81,15 @@ Fini les photos de chantier à relocaliser à la main : visez, déclenchez, et l
 | Réseau | facultatif : nécessaire pour l'adresse (Nominatim) et les fonds de carte OSM |
 
 > **Permissions Android** déclarées : caméra, localisation précise et approximative, stockage, Internet.
-> Sans localisation, les photos restent possibles mais sans coordonnées. Une position de démonstration (Paris) n'est utilisée que dans l'aperçu web.
+> Sans localisation, les photos restent possibles mais sans coordonnées : l'appli n'invente jamais de position, sur Android comme sur le web.
 
 ### Installation
+
+**Sur un téléphone Android** : ouvrez [cartoyoyo.github.io/CartoSnap-APK](https://cartoyoyo.github.io/CartoSnap-APK/) sur le téléphone, touchez *Télécharger l'APK Android*, ouvrez le fichier puis *Installer* (autorisez l'installation depuis le navigateur si Android le demande).
+
+**Sur iPhone** : il n'y a pas d'application iOS (il faudrait un Mac et un compte Apple Developer). Ouvrez [cartoyoyo.github.io/CartoSnap-web](https://cartoyoyo.github.io/CartoSnap-web/) dans **Safari**, autorisez la caméra et la position, puis *Partager → Sur l'écran d'accueil*. Les photos sont gardées dans Safari : exportez-les régulièrement.
+
+**Pour développer** :
 
 ```bash
 git clone https://github.com/Cartoyoyo/CartoSnap.git
@@ -75,13 +107,33 @@ flutter test
 
 ### Utilisation
 
-1. **Ouvrir l'application** : l'écran de démarrage laisse place au viseur, la position GPS s'affiche dès le premier fix.
-2. **Régler** (icône engrenage) : système de coordonnées, préfixe de nom, dossier de sauvegarde, options d'annotation.
-3. **Photographier** : le bouton central enregistre la photo. Le pincement zoome, le double-tap bascule entre 1x et 2x, les pastilles au-dessus du bouton changent d'objectif, le bouton de droite bascule caméra arrière/frontale. La photo apparaît aussitôt dans la galerie Android.
-4. **Annoter** (bouton « Annoter » du viseur) : après chaque capture, dessinez, commentez, puis « Enregistrer ».
-5. **Exporter** : Galerie → menu ⋮ → *Export CSV / ZIP*, ou depuis la carte des photos. Le fichier est ensuite proposé au partage Android.
-6. **Ouvrir dans QGIS** : décompressez le ZIP QGIS et ouvrez le fichier `.qgz` (ou `.qgs`).
-7. **Anciennes photos** : une fois après la mise à jour, Galerie → ⋮ → *Réparer les anciennes photos*.
+**1. Viser.** Le viseur affiche en permanence l'état du GPS, l'adresse, les coordonnées X/Y Lambert 93, l'altitude, la précision et le cap. Les pastilles à gauche changent d'objectif (0.5x, 1x, téléobjectif), le pincement zoome, la mini-carte montre la position. Le bouton central prend la photo ; la vignette à gauche ouvre la galerie, le bouton de droite bascule sur la caméra frontale.
+
+<p align="center"><img src="docs/screenshots/viseur.jpg" width="260" alt="Viseur CartoSnap"/></p>
+
+**2. Annoter** (interrupteur « Annoter » du viseur). Après chaque capture : stylo (12 couleurs, 6 épaisseurs), commentaire ajouté sous la photo, canevas ou bandeau GPS, puis *Enregistrer*. Sans annotation, le bandeau GPS est incrusté automatiquement.
+
+<p align="center"><img src="docs/screenshots/annotation.jpg" width="260" alt="Annotation"/></p>
+
+**3. Retrouver et vérifier.** La galerie (icône en haut à droite du viseur) liste les photos avec leur adresse et leur date. Une photo ouverte montre le bandeau incrusté, les X/Y Lambert 93, l'altitude, la précision, le cap et le nom du fichier `AAAAMMJJHHMMSS_X…_Y….jpg`.
+
+<p align="center"><img src="docs/screenshots/galerie.jpg" width="260" alt="Galerie"/> &nbsp; <img src="docs/screenshots/photo_detail.jpg" width="260" alt="Détail d'une photo"/></p>
+
+**4. Situer sur la carte.** Galerie → icône carte : les photos apparaissent en vignettes numérotées. Le bouton de téléchargement enregistre la carte en JPEG (portrait ou paysage, standard ou haute qualité A4), avec titre et commentaire facultatifs.
+
+<p align="center"><img src="docs/screenshots/carte_photos.jpg" width="260" alt="Carte des photos"/> &nbsp; <img src="docs/screenshots/export_carte_jpeg.jpg" width="260" alt="Export JPEG de la carte"/></p>
+
+**5. Exporter.** Galerie → menu ⋮ → *Export CSV / ZIP*, ou bouton tableau de la carte. Choisissez CSV, ZIP photos + CSV, ZIP QGIS, ZIP complet ou **Carte HTML** ; le fichier est ensuite proposé au partage (mail, messagerie, Drive…).
+
+<p align="center"><img src="docs/screenshots/export_donnees.jpg" width="260" alt="Fenêtre d'export"/></p>
+
+**6. Partager la Carte HTML.** Le fichier `.html` s'ouvre dans n'importe quel navigateur, sans logiciel : carte avec choix du fond, marqueurs numérotés, popup avec la photo et les X/Y Lambert 93, grille de toutes les photos. Le bouton **Exporter en PDF** produit un dossier imprimable : titre au choix, A4 ou A3, portrait ou paysage, page 1 = la carte, pages suivantes = 6 photos par page.
+
+<p align="center"><img src="docs/screenshots/carte_html.jpg" width="760" alt="Carte HTML dans un navigateur"/></p>
+
+**7. Ouvrir dans QGIS.** Décompressez le ZIP QGIS et ouvrez le fichier `.qgz` (ou `.qgs`).
+
+**8. Anciennes photos.** Sur Android, une fois après la mise à jour : Galerie → ⋮ → *Réparer les anciennes photos*.
 
 ### Contenu des exports
 
@@ -132,12 +184,15 @@ CartoSnap is a Flutter field camera app that geotags photos and computes their *
 - **Gallery and photo map**: clustering, forced scale, A4 JPEG map export at 100 dpi.
 - **Compass heading** stored in EXIF (magnetic north on Android, true north on iOS) and **lens selector** (0.5x / 1x / tele) when several rear cameras are exposed.
 - **Exports**: CSV (`;`, UTF-8 BOM), ZIP photos + CSV, QGIS ZIP (GeoJSON + `.qgz`/`.qgs` + `photos/`, photos shown as thumbnails), full ZIP, **HTML map** (single `.html` file: OSM / IGN aerial map, markers, Lambert 93 coordinates and embedded photos).
-- **Basemap setting**: OpenStreetMap or OpenStreetMap France, used by every map and the QGIS project.
+- **Basemap setting**: OpenStreetMap France or OpenTopoMap, used by every map and the QGIS project.
 - **Old photo repair** (Gallery → ⋮): PNG-in-`.jpg` re-encoded, GPS EXIF rewritten, file names fixed, Paris demo positions cleared.
 - **GPS EXIF** in every geotagged photo, banner and annotation included (JPEG re-encoding, quality 92).
 - **No made-up position**: with GPS off or denied, photos are saved without coordinates (empty X/Y in exports, null geometry in GeoJSON); tracking resumes when GPS is turned back on.
 
 ### Installation
+
+**Android**: open [cartoyoyo.github.io/CartoSnap-APK](https://cartoyoyo.github.io/CartoSnap-APK/) on the phone and install the APK.
+**iPhone**: open [cartoyoyo.github.io/CartoSnap-web](https://cartoyoyo.github.io/CartoSnap-web/) in Safari, allow camera and location, then *Share → Add to Home Screen*.
 
 ```bash
 git clone https://github.com/Cartoyoyo/CartoSnap.git
@@ -146,6 +201,10 @@ flutter pub get
 flutter run
 flutter test
 ```
+
+### Usage
+
+The step-by-step screenshots are in [Aperçu rapide](#aperçu-rapide--quick-overview) and in the French *Utilisation* section: aim, annotate, browse the gallery, place photos on the map, export (CSV, ZIP, QGIS project or **HTML map** with a **PDF export** button).
 
 ### Accuracy and fix of 2026-10-04
 
@@ -171,6 +230,8 @@ CartoSnap es una aplicación Flutter de cámara de campo que georreferencia cada
 - Galería, mapa de fotos y exportación JPEG A4
 - Exportación CSV, GeoJSON y proyecto QGIS `.qgs`
 
+> Las capturas de pantalla se encuentran en la sección [Aperçu rapide](#aperçu-rapide--quick-overview) al inicio de este documento.
+
 ### Instalación
 
 ```bash
@@ -193,6 +254,8 @@ CartoSnap é uma aplicação Flutter de câmara de campo que georreferencia cada
 - Faixa GPS, anotação com caneta e comentário
 - Galeria, mapa de fotografias e exportação JPEG A4
 - Exportação CSV, GeoJSON e projeto QGIS `.qgs`
+
+> As capturas de ecrã encontram-se na secção [Aperçu rapide](#aperçu-rapide--quick-overview) no início deste documento.
 
 ### Instalação
 
@@ -217,6 +280,8 @@ CartoSnap ist eine Flutter-Feldkamera-App, die jedes Foto georeferenziert und se
 - Galerie, Fotokarte und A4-JPEG-Export
 - Export als CSV, GeoJSON und QGIS-Projekt `.qgs`
 
+> Die Screenshots befinden sich im Abschnitt [Aperçu rapide](#aperçu-rapide--quick-overview) am Anfang dieses Dokuments.
+
 ### Installation
 
 ```bash
@@ -239,7 +304,8 @@ d2 --layout elk architecture.d2 architecture.svg
 ## Changelog
 
 |---------|-------|
-| **0.96 — 04/10/2026** | Nouvel export **Carte HTML** : un seul fichier `.html` (carte Leaflet, fonds OSM / OSM France / OpenTopoMap + photo aérienne IGN, marqueurs numérotés, popups avec X/Y Lambert 93, photos réduites à 1600 px intégrées, visionneuse plein écran, grille des photos) — viseur fidèle à la photo sur Android et web — bandeau GPS : ouverture des réglages (Android) ou guide Safari (web) — pastilles d'objectif en colonne à gauche — fond de carte **OpenTopoMap** (topographique) dans les réglages — compilation de l'APK par GitHub Actions |
+| **0.97 — 04/10/2026** | Carte HTML : bouton **Exporter en PDF** (titre personnalisable, A4 ou A3, portrait ou paysage ; page 1 = la carte telle qu'affichée, pages suivantes = mosaïques de 6 photos avec légendes Lambert 93), enregistré en PDF par la fenêtre d'impression du téléphone ou du PC — fond OpenStreetMap standard retiré (OSM France par défaut) |
+| **0.96 — 04/10/2026** | Nouvel export **Carte HTML** : un seul fichier `.html` (carte Leaflet, fonds OSM France / OpenTopoMap + photo aérienne IGN, marqueurs numérotés, popups avec X/Y Lambert 93, photos réduites à 1600 px intégrées, visionneuse plein écran, grille des photos) — viseur fidèle à la photo sur Android et web — bandeau GPS : ouverture des réglages (Android) ou guide Safari (web) — pastilles d'objectif en colonne à gauche — fond de carte **OpenTopoMap** (topographique) dans les réglages, fond OpenStreetMap standard retiré (OSM France par défaut) — compilation de l'APK par GitHub Actions |
 | **0.95 — 04/10/2026 (branche `web`)** | Renommage LambertSnap → CartoSnap (nom affiché, EXIF, exports, dossier `DCIM/CartoSnap` ; la réparation des anciennes photos LambertSnap est conservée) — version web utilisable sur iPhone via Safari : photos stockées dans le navigateur (IndexedDB), partage iOS, export ZIP/CSV/QGIS, installation sur l'écran d'accueil |
 | **0.94 — 04/10/2026** | Correction de l'exposant `n` de la projection Lambert 93 (erreur jusqu'à ~300 m) — photos annotées ou avec bandeau enregistrées en vrai JPEG avec EXIF GPS — suppression de la position factice de Paris quand le GPS est coupé, exports sans coordonnées pour ces photos, reprise automatique du suivi — chemin `assets/icon/` corrigé dans `pubspec.yaml` — tests unitaires (conversion, JPEG, EXIF, exports sans GPS) — README réécrit — diagramme `architecture.d2` — boussole branchée (cap EXIF) — sélecteur d'objectif — canal MediaScanner Android — suffixe Portrait/Paysage de l'export carte — fuite du dialogue d'échelle corrigée — version unique `appVersion` — réglage « Horodatage » appliqué au bandeau et au canevas — fond de carte OSM / OSM France branché partout — projet QGIS en `.qgz` avec photos en vignettes — réparation des anciennes photos — GPSTimeStamp EXIF en UTC — test de l'écran de démarrage corrigé |
 | **0.93** | Version affichée dans l'application au moment de l'analyse |
