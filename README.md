@@ -10,6 +10,7 @@
 
 [![Flutter](https://img.shields.io/badge/Flutter-Dart%20%5E3.9.2-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
 [![Version](https://img.shields.io/badge/version-1.1.0-blue)](pubspec.yaml)
+[![Téléchargements](https://img.shields.io/github/downloads/Cartoyoyo/CartoSnap-APK/total?label=t%C3%A9l%C3%A9chargements)](https://github.com/Cartoyoyo/CartoSnap-APK/releases)
 [![Android](https://img.shields.io/badge/Android-APK-3DDC84?logo=android&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-APK/)
 [![iPhone](https://img.shields.io/badge/iPhone-version%20web-lightgrey?logo=safari&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-web/)
 [![CRS](https://img.shields.io/badge/CRS-EPSG%3A2154%20Lambert%2093-orange)](lib/services/coordinate_converter.dart)
