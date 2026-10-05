@@ -9,7 +9,7 @@
 **Appareil photo de terrain qui nomme, annote et géoréférence chaque cliché en Lambert 93, puis l'exporte prêt à ouvrir dans QGIS**
 
 [![Flutter](https://img.shields.io/badge/Flutter-Dart%20%5E3.9.2-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-[![Version](https://img.shields.io/badge/version-1.0.1-blue)](pubspec.yaml)
+[![Version](https://img.shields.io/badge/version-1.1.0-blue)](pubspec.yaml)
 [![Android](https://img.shields.io/badge/Android-APK-3DDC84?logo=android&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-APK/)
 [![iPhone](https://img.shields.io/badge/iPhone-version%20web-lightgrey?logo=safari&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-web/)
 [![CRS](https://img.shields.io/badge/CRS-EPSG%3A2154%20Lambert%2093-orange)](lib/services/coordinate_converter.dart)
@@ -77,7 +77,7 @@ Fini les photos de chantier à relocaliser à la main : visez, déclenchez, et l
 - **Version iPhone (web)** : la même application dans Safari, installable sur l'écran d'accueil ; photos gardées dans le navigateur (IndexedDB), partage par la feuille de partage iOS (Enregistrer l'image, AirDrop, Mail), mêmes exports. Voir [Plateformes](#plateformes).
 - **Viseur fidèle** : l'aperçu montre l'image entière, exactement le cadrage de la photo enregistrée (bandes noires si l'écran est plus allongé).
 - **Localisation coupée ou refusée** : un bandeau rouge l'indique dans le viseur ; sur Android, un toucher ouvre directement les réglages (localisation ou autorisations de l'appli) ; sur iPhone, il ouvre un guide pas à pas des réglages Safari.
-- **Projet QGIS prêt à l'emploi** : chaque photo affichée **en vignette** sur la carte (point bleu = position exacte), dispersion des photos superposées, étiquette = nom du fichier, info-bulle, action « Ouvrir la photo », chemins relatifs, fond de carte du réglage. Vérifié en chargeant le projet généré dans QGIS 3.44.
+- **Projet QGIS prêt à l'emploi** : chaque photo affichée **en vignette encadrée** (nom du fichier sous la photo) reliée à son point par un trait (point bleu = position exacte), sans chevauchement (photos superposées écartées), vignettes déplaçables à la main (outil « Déplacer une étiquette », position enregistrée dans le GeoJSON), info-bulle, action « Ouvrir la photo », chemins relatifs, fond de carte du réglage. Vérifié en chargeant le projet généré dans QGIS 3.44.
 - **Fond de carte** : OpenStreetMap France (par défaut) ou OpenTopoMap (topographique), au choix dans les réglages, appliqué à la mini-carte, à la carte des photos, à l'export JPEG A4, au projet QGIS et à l'ouverture de la Carte HTML (qui propose en plus la photo aérienne IGN).
 - **Réparation des anciennes photos** (Galerie → ⋮) : reconversion en JPEG des PNG enregistrés en `.jpg`, EXIF GPS réécrit, noms de fichiers renommés avec les X/Y corrigés, position factice de Paris effacée.
 - **EXIF GPS** : latitude, longitude, altitude, cap, date et coordonnées Lambert 93 (description) écrits dans chaque photo géolocalisée, y compris après bandeau ou annotation (réencodage JPEG qualité 92).
@@ -372,6 +372,7 @@ d2 --layout elk architecture.d2 architecture.svg
 
 | Version | Notes |
 |---------|-------|
+| **1.1.0 — 05/10/2026** | Projet QGIS : photos en **vignettes encadrées** (cadre bleu, nom du fichier sur 3 lignes sous la photo) reliées à leur point par un trait de rappel, **sans chevauchement** (photos prises au même endroit écartées), **déplaçables à la main** avec l'outil « Déplacer une étiquette » (position enregistrée dans les champs `label_x` / `label_y` du GeoJSON) ; chemin des photos sans `file:///` |
 | **1.0.1 — 04/10/2026** | Rapport PDF de la Carte HTML sans les en-têtes et pieds de page du navigateur (date, titre, chemin du fichier) : marges d'impression nulles, marge de 10 mm recréée dans la page |
 | **1.0 — 04/10/2026** | Première version stable de **CartoSnap** (ex LambertSnap) : Android (APK) et iPhone (version web Safari) ; photos géoréférencées Lambert 93, annotation, galerie et carte des photos, exports CSV / ZIP / projet QGIS / Carte HTML avec export PDF ; README illustré |
 | **0.97.1 — 04/10/2026** | Adresse courte quand il n'y a pas de rue (lieu-dit ou commune au lieu de l'adresse complète « Minier, Châtel-Montagne, Vichy, Allier, … ») ; les adresses trop longues des photos déjà prises sont raccourcies à l'affichage et dans les exports |
