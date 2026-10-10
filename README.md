@@ -27,12 +27,12 @@
 | 1 — Viser | 2 — Annoter | 3 — Retrouver |
 |:---:|:---:|:---:|
 | ![Viseur](docs/screenshots/viseur.jpg) | ![Annotation](docs/screenshots/annotation.jpg) | ![Galerie](docs/screenshots/galerie.jpg) |
-| Position GPS, adresse et X/Y Lambert 93<br>en direct, mini-carte et objectifs | Stylo 12 couleurs, commentaire<br>ajouté sous la photo | Galerie de l'appli :<br>adresse et date de chaque photo |
+| Position GPS, adresse et X/Y Lambert 93<br>en direct, cap, mini-carte ronde | Stylo 12 couleurs, commentaire<br>et canevas ajoutés sous la photo | Galerie classée par jour,<br>en grille ou en liste |
 
 | 4 — Vérifier | 5 — Situer | 6 — Exporter |
 |:---:|:---:|:---:|
 | ![Photo](docs/screenshots/photo_detail.jpg) | ![Carte des photos](docs/screenshots/carte_photos.jpg) | ![Export](docs/screenshots/export_donnees.jpg) |
-| Bandeau incrusté, X/Y, altitude,<br>précision et cap enregistrés | Carte des photos (vignettes)<br>et export JPEG de la carte | CSV, ZIP, projet QGIS<br>ou Carte HTML |
+| Canevas sous la photo, X/Y, altitude,<br>précision et cap enregistrés | Carte des photos, bandeau de vignettes,<br>mise en page et image JPEG | Compte rendu (Carte HTML), projet QGIS<br>ou photos + tableau Excel |
 
 | Résultat : la Carte HTML ouverte dans un navigateur |
 |:---:|
@@ -142,7 +142,7 @@ flutter test
 
 <p align="center"><img src="docs/screenshots/annotation.jpg" width="260" alt="Annotation"/></p>
 
-**3. Retrouver et vérifier.** La galerie (vignette en bas à gauche du viseur) présente les photos jour par jour, en grille ou en liste (bascule en haut à droite). Une photo ouverte montre le bandeau incrusté, les X/Y Lambert 93, l'altitude, la précision, le cap et le nom du fichier `AAAAMMJJHHMMSS_X…_Y….jpg`.
+**3. Retrouver et vérifier.** La galerie (vignette en bas à gauche du viseur) présente les photos jour par jour, en grille ou en liste (bascule en haut à droite). Une photo ouverte montre le bandeau ou le canevas ajouté sous la photo, les X/Y Lambert 93, l'altitude, la précision, le cap et le nom du fichier `AAAAMMJJHHMMSS_X…_Y….jpg`.
 
 <p align="center"><img src="docs/screenshots/galerie.jpg" width="260" alt="Galerie"/> &nbsp; <img src="docs/screenshots/photo_detail.jpg" width="260" alt="Détail d'une photo"/></p>
 
@@ -212,7 +212,8 @@ Le GPS fournit des coordonnées WGS84, traitées ici comme RGF93. L'écart entre
 | Photos de la version web | Gardées dans Safari, pas dans la photothèque : à exporter ou partager régulièrement. Safari peut effacer les données d'un site non installé sur l'écran d'accueil. |
 | Carte HTML hors connexion | Les photos et les coordonnées s'affichent, mais la carte (Leaflet et fonds) a besoin d'internet à l'ouverture. |
 | Rapport PDF | Produit par la fenêtre d'impression du système (*Enregistrer en PDF*), pas par l'application elle-même. |
-| Signature de l'APK | Signé avec une clé de test : une ancienne LambertSnap signée autrement doit être désinstallée avant d'installer CartoSnap. |
+| Résolution sur iPhone (web) | Safari capture une image du flux vidéo de la caméra (jusqu'à la 4K, en 16:9), pas une photo de l'appareil photo natif de l'iPhone. |
+| Signature de l'APK | Signé avec une clé de test : Android peut demander de désinstaller la version précédente avant une mise à jour. Les photos de `DCIM/CartoSnap` restent sur le téléphone et sont retrouvées au démarrage (position, cap, date), sans leur adresse. |
 
 ---
 
@@ -220,27 +221,29 @@ Le GPS fournit des coordonnées WGS84, traitées ici comme RGF93. L'écart entre
 
 ### Description
 
-CartoSnap is a Flutter field camera app that geotags photos and computes their **Lambert 93 (EPSG:2154)** coordinates on the device, with no online service and no external projection library. Each photo gets a standardised file name and a burned-in coordinate banner, and can be exported to CSV, GeoJSON, a ready-to-open QGIS project or a shareable **HTML map** that prints to a **PDF report**. It runs on Android (APK) and on iPhone (web version in Safari).
+CartoSnap is a Flutter field camera app that geotags photos and computes their **Lambert 93 (EPSG:2154)** coordinates on the device, with no online service and no external projection library. Photos are kept at **full sensor resolution**, get a standardised file name and a coordinate banner added **below** the image, and can be exported as an **HTML map** (printable to a **PDF report**), a ready-to-open **QGIS project** or photos + CSV for Excel. It runs on Android (APK) and on iPhone (web version in Safari).
 
 ### Features
 
 - **Built-in Lambert 93 conversion**: RGF93 / GRS80 conformal conic projection (IGN algorithms), WGS84 ↔ Lambert 93 both ways, sub-millimetre agreement with PROJ.
-- **Automatic naming**: `YYYYMMDDHHMMSS_X652469_Y6862035[_prefix].jpg`.
-- **GPS banner**: address, `X … Y … | EPSG:2154`, altitude and accuracy burned into the photo.
-- **Annotation**: pen, comment below the photo, GPS canvas or GPS banner.
+- **Automatic naming**: `YYYYMMDDHHMMSS_X652469_Y6862035[_suffix].jpg`, at capture time, with an optional site suffix (accents removed, only letters, digits, `-` and `_` kept).
+- **Full-resolution photos**, kept as they are on the device; downscaling to 1600 px is optional at export.
+- **Clean viewfinder**: GPS status, time and buttons on a light top gradient; two-line bottom banner (address, Lambert 93 or WGS84 X/Y, altitude, accuracy colour-coded, heading) that folds into a one-line pill; round mini-map that expands on tap; landscape layout. A lost GPS signal is flagged and the photo is then saved without coordinates.
+- **Compass**: camera heading shown in the viewfinder and stored in EXIF (`GPSImgDirection`), on Android and in Safari on iPhone (permission asked on first tap); smoothed, restarted if the sensor freezes.
+- **Annotation**: pen (12 colours, 6 widths, undo), comment, and a **canvas added below the photo** (comment, address and date, Lambert 93 X/Y, altitude, accuracy, heading). Without annotation, a GPS banner with the heading is added below the photo.
 - **Reverse geocoding** through Nominatim (OSM), 1 request per second, short address (street, else hamlet, else town).
-- **Gallery and photo map**: clustering, forced scale, A4 JPEG map export at 100 dpi (portrait or landscape, standard or high quality).
-- **Compass heading** stored in EXIF (magnetic north on Android, true north on iOS) and **lens selector** (0.5x / 1x / tele) when several rear cameras are exposed.
-- **Exports**: CSV (`;`, UTF-8 BOM), ZIP photos + CSV, QGIS ZIP (GeoJSON + `.qgz`/`.qgs` + `photos/`, photos shown as thumbnails), full ZIP, **HTML map**.
-- **HTML map**: one self-contained `.html` file readable in any browser: Leaflet map with basemap switch (OSM France, OpenTopoMap, IGN aerial imagery), numbered markers, popups with photo, date, Lambert 93 X/Y, address and accuracy, full-screen viewer, grid of all photos. Photos are downscaled to 1600 px and embedded, so the file can be e-mailed.
+- **Gallery grouped by day** (one day ≈ one site), grid or list, *Export this day*, bottom action bar (Map, Select, Export, More), per-day selection with counters.
+- **Photo map**: clustering, foldable thumbnail strip (tap = centre the map), forced scale, bottom action bar (Photos, Layout, Image, Export), A4 JPEG map at 100 dpi (portrait or landscape, standard or high quality) with title and comment.
+- **Exports**, three usage-based choices with an estimated size: *Send a report* (HTML map), *Open in QGIS* (ZIP: project, GeoJSON, CSV, photos), *Photos + Excel table* (ZIP: photos + CSV); all photos, one day or a selection; photos downscaled to 1600 px (EXIF kept) or original.
+- **HTML map**: one self-contained `.html` file readable in any browser: Leaflet map with basemap switch (OSM France, OpenTopoMap, IGN aerial imagery), numbered markers, popups with photo, date, Lambert 93 X/Y, address and accuracy, full-screen viewer, grid of all photos. Photos are downscaled to 1600 px (by the browser itself on the web version) and embedded, so the file can be e-mailed.
 - **PDF report** (*Exporter en PDF* button of the HTML map): editable title, A4 or A3, portrait or landscape; page 1 = the map as displayed, next pages = 6 photos per page with Lambert 93 captions; produced by the system print dialog, without browser headers and footers.
 - **iPhone (web) version**: the same app in Safari, installable on the home screen; photos kept in the browser (IndexedDB), shared through the iOS share sheet, same exports.
-- **Faithful viewfinder**: the preview shows the whole frame, exactly what the photo will contain.
 - **Location off or denied**: a red banner says so; on Android it opens the system settings, on iPhone it opens a step-by-step Safari settings guide.
 - **Basemap setting**: OpenStreetMap France or OpenTopoMap, used by every map and the QGIS project.
-- **Old photo repair** (Gallery → ⋮): PNG-in-`.jpg` re-encoded, GPS EXIF rewritten, file names fixed, Paris demo positions cleared.
-- **GPS EXIF** in every geotagged photo, banner and annotation included (JPEG re-encoding, quality 92).
-- **No made-up position**: with GPS off or denied, photos are saved without coordinates (empty X/Y in exports, null geometry in GeoJSON); tracking resumes when GPS is turned back on.
+- **Updates without data loss**: stored data is versioned and migrated at startup; after a reinstall, photos found in the folder are recovered from their EXIF (position, heading, date), or through Gallery → More → *Find my photos*.
+- **GPS EXIF** in every geotagged photo, banner and annotation included.
+- **No made-up position**: with GPS off, denied or lost, photos are saved without coordinates (empty X/Y in exports, null geometry in GeoJSON); tracking resumes when the signal returns.
+- **French interface**, including the standard Flutter texts (tooltips, menus).
 
 ### Installation
 
@@ -257,7 +260,7 @@ flutter test
 
 ### Usage
 
-The step-by-step screenshots are in [Aperçu rapide](#aperçu-rapide--quick-overview) and in the French *Utilisation* section: aim, annotate, browse the gallery, place photos on the map, export (CSV, ZIP, QGIS project or **HTML map** with a **PDF export** button).
+The step-by-step screenshots are in [Aperçu rapide](#aperçu-rapide--quick-overview) and in the French *Utilisation* section: aim (✎ button to annotate), annotate, browse the gallery by day, place photos on the map (*Map*, thumbnail strip, *Layout*, *Image*), then *Export*: HTML map (with a **PDF export** button), QGIS project or photos + CSV.
 
 ### Accuracy and fix of 2026-10-04
 
@@ -265,7 +268,7 @@ Earlier versions computed the projection exponent `n` incorrectly (0.7302 instea
 
 ### Known limitations
 
-Burned-in banners of photos taken before 0.94 keep their old coordinates (the repair tool fixes names, EXIF and format, not pixels). Android lens labels are guessed; on iPhone they come from Safari's camera names. Web photos live in Safari, not in the Photos app: export them regularly. The HTML map needs internet for its basemaps. The PDF report is made by the system print dialog. The APK is signed with a test key. See the French tables above for details.
+Banners of photos taken before 0.94 keep their old coordinates (the repair tool fixes names, EXIF and format, not pixels). Android lens labels are guessed; on iPhone they come from Safari's camera names. On iPhone the web version captures a frame of the camera video stream (up to 4K, 16:9), not a photo from the native camera app. Web photos live in Safari, not in the Photos app: export them regularly. The HTML map needs internet for its basemaps. The PDF report is made by the system print dialog. The APK is signed with a test key: Android may require uninstalling the previous version before an update (photos in `DCIM/CartoSnap` stay on the phone and are recovered at startup, without their address). See the French tables above for details.
 
 ---
 
@@ -273,17 +276,21 @@ Burned-in banners of photos taken before 0.94 keep their old coordinates (the re
 
 ### Descripción
 
-CartoSnap es una aplicación Flutter de cámara de campo que georreferencia cada foto y calcula sus coordenadas **Lambert 93 (EPSG:2154)** en el propio teléfono, con nombre de archivo normalizado, banda de coordenadas y exportación a CSV, GeoJSON, proyecto QGIS, mapa HTML e informe PDF. También genera un mapa HTML con informe PDF y funciona en iPhone (versión web).
+CartoSnap es una aplicación Flutter de cámara de campo que georreferencia cada foto y calcula sus coordenadas **Lambert 93 (EPSG:2154)** en el propio teléfono. Las fotos se guardan **a resolución completa**, con nombre de archivo normalizado y banda de coordenadas añadida **debajo** de la imagen, y se exportan como **mapa HTML** (con informe PDF), **proyecto QGIS** o fotos + CSV para Excel. Funciona en Android (APK) y en iPhone (versión web en Safari).
 
 ### Funcionalidades
 
 - Conversión WGS84 ↔ Lambert 93 integrada (algoritmos IGN)
-- Nombre de archivo con fecha y coordenadas X/Y
-- Banda GPS, anotación con lápiz y comentario
-- Galería, mapa de fotos y exportación JPEG A4
-- Exportación CSV, GeoJSON y proyecto QGIS `.qgz`/`.qgs`
-- **Mapa HTML**: un solo archivo `.html` con mapa (OSM France, OpenTopoMap, ortofoto IGN), marcadores, coordenadas Lambert 93 y fotos integradas
+- Nombre de archivo con fecha de la toma y coordenadas X/Y, sufijo de obra opcional
+- Fotos a resolución completa; reducción a 1600 px opcional al exportar (EXIF conservado)
+- Visor despejado: banda GPS de 2 líneas plegable, minimapa redondo, modo horizontal; pérdida de señal GPS señalada
+- Brújula en Android y en Safari (iPhone), rumbo guardado en el EXIF
+- Anotación con lápiz y comentario, lienzo añadido debajo de la foto
+- Galería **agrupada por día**, cuadrícula o lista, barra de acciones abajo, selección por día
+- Mapa de fotos con tira de miniaturas, imagen JPEG A4 con título y comentario
+- Exportación en 3 opciones según el uso, con tamaño estimado: **mapa HTML**, **proyecto QGIS** (`.qgz`/`.qgs`, GeoJSON, CSV), fotos + CSV
 - **Informe PDF** desde el mapa HTML: título, A4/A3, vertical/horizontal; página 1 = mapa, luego 6 fotos por página
+- Actualizaciones sin pérdida: datos versionados, fotos recuperadas tras una reinstalación
 - Versión web para iPhone (Safari)
 
 > Las capturas de pantalla se encuentran en la sección [Aperçu rapide](#aperçu-rapide--quick-overview) al inicio de este documento.
@@ -303,17 +310,21 @@ cd CartoSnap && flutter pub get && flutter run
 
 ### Descrição
 
-CartoSnap é uma aplicação Flutter de câmara de campo que georreferencia cada fotografia e calcula as suas coordenadas **Lambert 93 (EPSG:2154)** no próprio telemóvel, com nome de ficheiro normalizado, faixa de coordenadas e exportação para CSV, GeoJSON e projeto QGIS. Também gera um mapa HTML com relatório PDF e funciona no iPhone (versão web).
+CartoSnap é uma aplicação Flutter de câmara de campo que georreferencia cada fotografia e calcula as suas coordenadas **Lambert 93 (EPSG:2154)** no próprio telemóvel. As fotografias são guardadas **em resolução total**, com nome de ficheiro normalizado e faixa de coordenadas acrescentada **por baixo** da imagem, e exportadas como **mapa HTML** (com relatório PDF), **projeto QGIS** ou fotografias + CSV para Excel. Funciona em Android (APK) e no iPhone (versão web no Safari).
 
 ### Funcionalidades
 
 - Conversão WGS84 ↔ Lambert 93 integrada (algoritmos IGN)
-- Nome de ficheiro com data e coordenadas X/Y
-- Faixa GPS, anotação com caneta e comentário
-- Galeria, mapa de fotografias e exportação JPEG A4
-- Exportação CSV, GeoJSON e projeto QGIS `.qgz`/`.qgs`
-- **Mapa HTML**: um único ficheiro `.html` com mapa (OSM France, OpenTopoMap, ortofoto IGN), marcadores, coordenadas Lambert 93 e fotografias integradas
+- Nome de ficheiro com a data da captura e as coordenadas X/Y, sufixo de obra opcional
+- Fotografias em resolução total; redução para 1600 px opcional na exportação (EXIF conservado)
+- Visor desimpedido: faixa GPS de 2 linhas recolhível, minimapa redondo, modo paisagem; perda de sinal GPS assinalada
+- Bússola em Android e no Safari (iPhone), rumo guardado no EXIF
+- Anotação com caneta e comentário, tela acrescentada por baixo da fotografia
+- Galeria **agrupada por dia**, grelha ou lista, barra de ações em baixo, seleção por dia
+- Mapa de fotografias com faixa de miniaturas, imagem JPEG A4 com título e comentário
+- Exportação em 3 opções por utilização, com tamanho estimado: **mapa HTML**, **projeto QGIS** (`.qgz`/`.qgs`, GeoJSON, CSV), fotografias + CSV
 - **Relatório PDF** a partir do mapa HTML: título, A4/A3, retrato/paisagem; página 1 = mapa, depois 6 fotografias por página
+- Atualizações sem perda: dados versionados, fotografias recuperadas após reinstalação
 - Versão web para iPhone (Safari)
 
 > As capturas de ecrã encontram-se na secção [Aperçu rapide](#aperçu-rapide--quick-overview) no início deste documento.
@@ -333,17 +344,21 @@ cd CartoSnap && flutter pub get && flutter run
 
 ### Beschreibung
 
-CartoSnap ist eine Flutter-Feldkamera-App, die jedes Foto georeferenziert und seine **Lambert-93-Koordinaten (EPSG:2154)** direkt auf dem Gerät berechnet – mit normiertem Dateinamen, eingeblendetem Koordinatenband und Export nach CSV, GeoJSON und als QGIS-Projekt. Außerdem erzeugt sie eine HTML-Karte mit PDF-Bericht und läuft auf dem iPhone (Web-Version).
+CartoSnap ist eine Flutter-Feldkamera-App, die jedes Foto georeferenziert und seine **Lambert-93-Koordinaten (EPSG:2154)** direkt auf dem Gerät berechnet. Die Fotos werden in **voller Auflösung** gespeichert, erhalten einen normierten Dateinamen und ein Koordinatenband **unter** dem Bild und lassen sich als **HTML-Karte** (mit PDF-Bericht), **QGIS-Projekt** oder Fotos + CSV für Excel exportieren. Sie läuft auf Android (APK) und auf dem iPhone (Web-Version in Safari).
 
 ### Funktionen
 
 - Integrierte Umrechnung WGS84 ↔ Lambert 93 (IGN-Algorithmen)
-- Dateiname mit Datum und X/Y-Koordinaten
-- GPS-Band, Annotation mit Stift und Kommentar
-- Galerie, Fotokarte und A4-JPEG-Export
-- Export als CSV, GeoJSON und QGIS-Projekt `.qgz`/`.qgs`
-- **HTML-Karte**: eine einzige `.html`-Datei mit Karte (OSM France, OpenTopoMap, IGN-Luftbild), Markern, Lambert-93-Koordinaten und eingebetteten Fotos
+- Dateiname mit Aufnahmezeitpunkt und X/Y-Koordinaten, optionales Baustellen-Suffix
+- Fotos in voller Auflösung; Verkleinerung auf 1600 px beim Export wählbar (EXIF bleibt erhalten)
+- Aufgeräumter Sucher: zweizeiliges, einklappbares GPS-Band, runde Minikarte, Querformat; GPS-Signalverlust wird angezeigt
+- Kompass unter Android und in Safari (iPhone), Blickrichtung im EXIF gespeichert
+- Annotation mit Stift und Kommentar, Infobereich unter dem Foto
+- Galerie **nach Tagen gruppiert**, Raster oder Liste, Aktionsleiste unten, Auswahl pro Tag
+- Fotokarte mit Miniaturleiste, A4-JPEG-Bild mit Titel und Kommentar
+- Export in 3 zweckbezogenen Varianten mit geschätzter Größe: **HTML-Karte**, **QGIS-Projekt** (`.qgz`/`.qgs`, GeoJSON, CSV), Fotos + CSV
 - **PDF-Bericht** aus der HTML-Karte: Titel, A4/A3, Hoch-/Querformat; Seite 1 = Karte, danach 6 Fotos pro Seite
+- Updates ohne Datenverlust: versionierte Daten, Fotos nach einer Neuinstallation wiederhergestellt
 - Web-Version für das iPhone (Safari)
 
 > Die Screenshots befinden sich im Abschnitt [Aperçu rapide](#aperçu-rapide--quick-overview) am Anfang dieses Dokuments.
