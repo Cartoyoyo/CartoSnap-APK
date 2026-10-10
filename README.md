@@ -9,7 +9,7 @@
 **Appareil photo de terrain qui nomme, annote et géoréférence chaque cliché en Lambert 93, puis l'exporte prêt à ouvrir dans QGIS**
 
 [![Flutter](https://img.shields.io/badge/Flutter-Dart%20%5E3.9.2-02569B?logo=flutter&logoColor=white)](https://flutter.dev)
-[![Version](https://img.shields.io/badge/version-1.1.0-blue)](pubspec.yaml)
+[![Version](https://img.shields.io/badge/version-1.2.0-blue)](pubspec.yaml)
 [![Téléchargements](https://img.shields.io/github/downloads/Cartoyoyo/CartoSnap-APK/total?label=t%C3%A9l%C3%A9chargements)](https://github.com/Cartoyoyo/CartoSnap-APK/releases)
 [![Android](https://img.shields.io/badge/Android-APK-3DDC84?logo=android&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-APK/)
 [![iPhone](https://img.shields.io/badge/iPhone-version%20web-lightgrey?logo=safari&logoColor=white)](https://cartoyoyo.github.io/CartoSnap-web/)
@@ -63,16 +63,17 @@ Fini les photos de chantier à relocaliser à la main : visez, déclenchez, et l
 ### Fonctionnalités
 
 - **Conversion Lambert 93 embarquée** : projection conique conforme RGF93 / GRS80 (algorithmes IGN), aller et retour WGS84 ↔ Lambert 93, écart nul au millimètre près avec PROJ.
-- **Nommage automatique** : `AAAAMMJJHHMMSS_X652469_Y6862035[_prefixe].jpg`, avec un préfixe de chantier facultatif (espaces et accents nettoyés).
-- **Bandeau GPS incrusté** : adresse, `X … Y … | EPSG:2154`, altitude et précision GPS, ajoutés automatiquement quand l'annotation est désactivée.
-- **Viseur informatif** : position en Lambert 93 ou en WGS84 décimal, altitude, précision (vert ≤ 10 m, orange ≤ 30 m, rouge au-delà), heure, mini-carte OSM.
-- **Boussole** : cap de prise de vue affiché dans le viseur et enregistré dans l'EXIF (`GPSImgDirection`, nord magnétique sous Android, nord vrai sous iOS). Sans magnétomètre, le cap GPS est utilisé.
+- **Nommage automatique** : `AAAAMMJJHHMMSS_X652469_Y6862035[_suffixe].jpg`, à l'heure de la prise de vue, avec un suffixe de chantier facultatif (accents retirés, seuls lettres, chiffres, `-` et `_` gardés).
+- **Photos en pleine résolution** : résolution maximale du capteur, gardée telle quelle sur l'appareil ; la réduction (1600 px) se fait à l'export si on le souhaite.
+- **Bandeau GPS sous la photo** : adresse, `X … Y … | EPSG:2154`, altitude, précision et cap, ajoutés automatiquement sous l'image (sans la masquer) quand l'annotation est désactivée.
+- **Viseur dégagé** : état GPS, heure et boutons posés sur un léger voile en haut ; bandeau de 2 lignes en bas (adresse, X/Y Lambert 93 ou WGS84, altitude, précision — vert ≤ 10 m, orange ≤ 30 m, rouge au-delà —, cap), repliable en pilule d'une ligne ; mini-carte ronde agrandissable ; disposition adaptée au paysage. Une perte de signal GPS est signalée et la photo est alors enregistrée sans coordonnées.
+- **Boussole** : cap de prise de vue (direction de l'objectif) affiché dans le viseur et enregistré dans l'EXIF (`GPSImgDirection`, nord magnétique sous Android et sur le web, nord vrai sous iOS natif), y compris dans Safari sur iPhone (autorisation demandée au premier toucher). Valeur lissée, capteur relancé s'il se fige. Sans boussole, le cap GPS est utilisé.
 - **Choix d'objectif** : sélecteur 0.5x / 1x / téléobjectif quand le téléphone expose plusieurs caméras arrière, en plus du zoom par pincement et de la bascule avant/arrière.
-- **Annotation après capture** : stylo (12 couleurs, 6 épaisseurs, annuler), commentaire ajouté sous la photo, canevas GPS sur la photo ou bandeau GPS sous la photo.
+- **Annotation après capture** : stylo (12 couleurs, 6 épaisseurs, annuler), commentaire, et **canevas** ajouté sous la photo (commentaire, adresse et date, X/Y Lambert 93, altitude, précision, cap), activable par défaut dans les réglages.
 - **Géocodage inverse** : adresse courte via Nominatim (OSM) — numéro et rue, sinon lieu-dit ou hameau, sinon commune — limitée à une requête par seconde et déclenchée après 3 s de position stable.
-- **Galerie** : grille ou liste, sélection multiple, partage, suppression, vue plein écran avec coordonnées Lambert 93.
-- **Carte des photos** : vignettes regroupées par proximité, échelle affichée et forçable (1/250 à 1/25 000), export JPEG au format A4 (portrait ou paysage, standard ou haute qualité, 100 dpi) avec titre et commentaire.
-- **Exports** : CSV, ZIP photos + CSV, ZIP QGIS, ZIP complet et Carte HTML, sur toutes les photos ou sur une sélection, puis proposés au partage (détail dans [Contenu des exports](#contenu-des-exports)).
+- **Galerie** : photos **regroupées par jour** (un jour ≈ un chantier), en grille ou en liste, avec « Exporter ce jour » ; barre d'actions en bas (Carte, Sélectionner, Exporter, Plus) ; sélection par jour avec compteur ; partage, suppression, vue plein écran avec coordonnées Lambert 93.
+- **Carte des photos** : vignettes regroupées par proximité, bandeau de vignettes dépliable (toucher = centrer la carte), échelle affichée et forçable (1/250 à 1/25 000), barre d'actions en bas (Photos, Mise en page, Image, Exporter), image JPEG A4 (portrait ou paysage, standard ou haute qualité, 100 dpi) avec titre et commentaire.
+- **Exports** : 3 choix nommés par usage — *Envoyer un compte rendu* (Carte HTML), *Ouvrir dans QGIS* (ZIP : projet, GeoJSON, CSV, photos), *Photos + tableau Excel* (ZIP : photos + CSV) — avec la taille estimée, sur toutes les photos, un jour ou une sélection ; photos réduites à 1600 px (EXIF conservé) ou originales, au choix (détail dans [Contenu des exports](#contenu-des-exports)).
 - **Carte HTML** : un seul fichier `.html`, lisible dans n'importe quel navigateur sans logiciel : carte Leaflet avec choix du fond (OSM France, OpenTopoMap, photo aérienne IGN), marqueurs numérotés, popup avec la photo, la date, les X/Y Lambert 93, l'adresse et la précision, visionneuse plein écran, grille de toutes les photos (y compris sans GPS). Les photos sont réduites à 1600 px et intégrées au fichier, qui reste envoyable par mail.
 - **Rapport PDF** (bouton *Exporter en PDF* de la Carte HTML) : titre modifiable, A4 ou A3, portrait ou paysage ; page 1 = la carte telle qu'affichée (fond, marqueurs, échelle), pages suivantes = 6 photos par page avec leurs légendes Lambert 93. Le PDF est produit par la fenêtre d'impression du téléphone ou du PC, sans en-têtes ni pieds de page du navigateur.
 - **Version iPhone (web)** : la même application dans Safari, installable sur l'écran d'accueil ; photos gardées dans le navigateur (IndexedDB), partage par la feuille de partage iOS (Enregistrer l'image, AirDrop, Mail), mêmes exports. Voir [Plateformes](#plateformes).
@@ -84,6 +85,7 @@ Fini les photos de chantier à relocaliser à la main : visez, déclenchez, et l
 - **EXIF GPS** : latitude, longitude, altitude, cap, date et coordonnées Lambert 93 (description) écrits dans chaque photo géolocalisée, y compris après bandeau ou annotation (réencodage JPEG qualité 92).
 - **Pas de position inventée** : si le GPS est coupé ou refusé, la photo est enregistrée sans coordonnées (`CartoSnap_<date>.jpg`), le témoin passe au rouge, et les exports laissent ses colonnes X/Y vides (géométrie nulle dans le GeoJSON). Le suivi reprend seul quand le GPS est réactivé.
 - **Dossier de sauvegarde** : `DCIM/CartoSnap` par défaut, ou un dossier choisi par l'utilisateur.
+- **Mises à jour sans perte** : les données enregistrées sont versionnées et migrées au démarrage ; après une réinstallation, les photos du dossier sont retrouvées automatiquement à partir de leur EXIF (position, cap, date), ou par Galerie → Plus → *Retrouver mes photos*.
 
 ### Plateformes
 
@@ -92,7 +94,7 @@ Fini les photos de chantier à relocaliser à la main : visez, déclenchez, et l
 | Installation | [page de téléchargement](https://cartoyoyo.github.io/CartoSnap-APK/) | [cartoyoyo.github.io/CartoSnap-web](https://cartoyoyo.github.io/CartoSnap-web/) → *Sur l'écran d'accueil* |
 | Où sont les photos | `DCIM/CartoSnap` (visibles dans la galerie du téléphone) | dans Safari (IndexedDB), pas dans la photothèque |
 | Partage et exports | feuille de partage Android | feuille de partage iOS, ou téléchargement |
-| Boussole (cap EXIF) | oui | non (cap GPS seulement) |
+| Boussole (cap EXIF) | oui | oui (autorisation au premier toucher) |
 | Choix du dossier, réparation des anciennes photos | oui | masqués (sans objet) |
 | Localisation refusée | le bandeau ouvre les réglages | le bandeau ouvre un guide des réglages Safari |
 | Hors connexion | photos, coordonnées, exports CSV/ZIP | idem, une fois l'appli chargée |
@@ -136,19 +138,19 @@ flutter test
 
 <p align="center"><img src="docs/screenshots/viseur.jpg" width="260" alt="Viseur CartoSnap"/></p>
 
-**2. Annoter** (interrupteur « Annoter » du viseur). Après chaque capture : stylo (12 couleurs, 6 épaisseurs), commentaire ajouté sous la photo, canevas ou bandeau GPS, puis *Enregistrer*. Sans annotation, le bandeau GPS est incrusté automatiquement.
+**2. Annoter** (bouton ✎ en haut du viseur). Après chaque capture : stylo (12 couleurs, 6 épaisseurs), commentaire, canevas ajouté sous la photo, puis *Enregistrer*. Sans annotation, le bandeau GPS est ajouté automatiquement sous la photo.
 
 <p align="center"><img src="docs/screenshots/annotation.jpg" width="260" alt="Annotation"/></p>
 
-**3. Retrouver et vérifier.** La galerie (icône en haut à droite du viseur) liste les photos avec leur adresse et leur date. Une photo ouverte montre le bandeau incrusté, les X/Y Lambert 93, l'altitude, la précision, le cap et le nom du fichier `AAAAMMJJHHMMSS_X…_Y….jpg`.
+**3. Retrouver et vérifier.** La galerie (vignette en bas à gauche du viseur) présente les photos jour par jour, en grille ou en liste (bascule en haut à droite). Une photo ouverte montre le bandeau incrusté, les X/Y Lambert 93, l'altitude, la précision, le cap et le nom du fichier `AAAAMMJJHHMMSS_X…_Y….jpg`.
 
 <p align="center"><img src="docs/screenshots/galerie.jpg" width="260" alt="Galerie"/> &nbsp; <img src="docs/screenshots/photo_detail.jpg" width="260" alt="Détail d'une photo"/></p>
 
-**4. Situer sur la carte.** Galerie → icône carte : les photos apparaissent en vignettes numérotées. Le bouton de téléchargement enregistre la carte en JPEG (portrait ou paysage, standard ou haute qualité A4), avec titre et commentaire facultatifs.
+**4. Situer sur la carte.** Galerie → *Carte* : les photos apparaissent en vignettes ; la languette *Photos* déplie le bandeau des vignettes. *Mise en page* règle le titre et le commentaire, *Image* enregistre ou partage la carte en JPEG (portrait ou paysage, standard ou haute qualité A4).
 
 <p align="center"><img src="docs/screenshots/carte_photos.jpg" width="260" alt="Carte des photos"/> &nbsp; <img src="docs/screenshots/export_carte_jpeg.jpg" width="260" alt="Export JPEG de la carte"/></p>
 
-**5. Exporter.** Galerie → menu ⋮ → *Export CSV / ZIP*, ou bouton tableau de la carte. Choisissez CSV, ZIP photos + CSV, ZIP QGIS, ZIP complet ou **Carte HTML** ; le fichier est ensuite proposé au partage (mail, messagerie, Drive…).
+**5. Exporter.** Galerie → *Exporter* (ou *Exporter ce jour*, ou une sélection), ou *Exporter* sur la carte. Choisissez *Envoyer un compte rendu* (Carte HTML), *Ouvrir dans QGIS* ou *Photos + tableau Excel* ; la taille estimée est affichée, et l'interrupteur *Photos réduites (1600 px)* allège les ZIP. Le fichier est ensuite proposé au partage (mail, messagerie, Drive…).
 
 <p align="center"><img src="docs/screenshots/export_donnees.jpg" width="260" alt="Fenêtre d'export"/></p>
 
@@ -164,17 +166,15 @@ flutter test
 
 **8. Ouvrir dans QGIS.** Décompressez le ZIP QGIS et ouvrez le fichier `.qgz` (ou `.qgs`).
 
-**9. Anciennes photos.** Sur Android, une fois après la mise à jour : Galerie → ⋮ → *Réparer les anciennes photos*.
+**9. Anciennes photos.** Sur Android, une fois après la mise à jour : Galerie → *Plus* → *Réparer les anciennes photos*. Après une réinstallation, les photos du dossier reviennent seules dans la galerie (ou Galerie → *Plus* → *Retrouver mes photos*).
 
 ### Contenu des exports
 
 | Export | Fichier produit | Contenu |
 |---|---|---|
-| CSV seul | `CartoSnap_Export_<date>.csv` | une ligne par photo, séparateur `;`, UTF-8 avec BOM (ouverture directe dans Excel) |
-| ZIP Photos + CSV | `CartoSnap_Export_<date>.zip` | le CSV + `photos/` |
-| ZIP QGIS | `CartoSnap_Export_<date>_QGIS.zip` | GeoJSON Lambert 93, projet `.qgz` et `.qgs` (photos en vignettes, action « Ouvrir la photo »), `photos/`, `LISEZMOI.txt` |
-| ZIP Complet | `CartoSnap_Export_<date>_Complet.zip` | CSV + GeoJSON + projet QGIS + `photos/` |
-| Carte HTML | `CartoSnap_Carte_<date>.html` | page autonome : carte, marqueurs, popups, photos réduites intégrées, bouton *Exporter en PDF* |
+| Photos + tableau Excel | `CartoSnap_Export_<date>.zip` | CSV (une ligne par photo, séparateur `;`, UTF-8 avec BOM, ouverture directe dans Excel) + `photos/` |
+| Ouvrir dans QGIS | `CartoSnap_Export_<date>_QGIS.zip` | GeoJSON Lambert 93, projet `.qgz` et `.qgs` (photos en vignettes, action « Ouvrir la photo »), CSV, `photos/`, `LISEZMOI.txt` |
+| Envoyer un compte rendu | `CartoSnap_Carte_<date>.html` | Carte HTML autonome : carte, marqueurs, popups, photos réduites intégrées, bouton *Exporter en PDF* |
 | Rapport PDF | au choix (impression) | depuis la Carte HTML : page carte + pages de 6 photos avec légendes |
 | Carte JPEG | `CartoSnap_Carte_<Portrait\|Paysage>_<STD\|HQ>_<date>.jpg` | depuis la carte des photos : carte A4 100 dpi avec vignettes, titre, commentaire, échelle |
 
@@ -191,7 +191,7 @@ Colonnes du CSV (et propriétés du GeoJSON) :
 | `Google Maps` | lien vers la position |
 | `photo_path` | GeoJSON seulement : `photos/<nom>` |
 
-Les coordonnées des exports sont recalculées à partir de la latitude et de la longitude stockées, au moment de l'export.
+Les coordonnées des exports sont recalculées à partir de la latitude et de la longitude stockées, au moment de l'export. Dans les ZIP, les photos sont soit les originales, soit des copies réduites à 1600 px qui gardent l'EXIF GPS (interrupteur *Photos réduites*).
 
 ### Précision de la conversion Lambert 93
 
@@ -373,6 +373,7 @@ d2 --layout elk architecture.d2 architecture.svg
 
 | Version | Notes |
 |---------|-------|
+| **1.2.0 — 10/10/2026** | **Boussole web** (Safari et Chrome) et boussole Android fiabilisée ; **photos en pleine résolution**, réduction 1600 px au choix à l'export (EXIF conservé) ; **nouvelle interface** : viseur dégagé (bandeau GPS 2 lignes repliable, mini-carte ronde, paysage), canevas d'annotation sous la photo, export en 3 choix par usage avec taille estimée, galerie regroupée par jour avec barre d'actions en bas, carte avec bandeau de vignettes ; perte de signal GPS signalée ; heure de prise de vue dans le nom et l'EXIF ; **mises à jour sans perte** (données versionnées, photos retrouvées après réinstallation) ; textes en français ; rapport HTML bien plus rapide sur le web |
 | **1.1.0 — 05/10/2026** | Projet QGIS : photos en **vignettes encadrées** (cadre bleu, nom du fichier sur 3 lignes sous la photo) reliées à leur point par un trait de rappel, **sans chevauchement** (photos prises au même endroit écartées), **déplaçables à la main** avec l'outil « Déplacer une étiquette » (position enregistrée dans les champs `label_x` / `label_y` du GeoJSON) ; chemin des photos sans `file:///` |
 | **1.0.1 — 04/10/2026** | Rapport PDF de la Carte HTML sans les en-têtes et pieds de page du navigateur (date, titre, chemin du fichier) : marges d'impression nulles, marge de 10 mm recréée dans la page |
 | **1.0 — 04/10/2026** | Première version stable de **CartoSnap** (ex LambertSnap) : Android (APK) et iPhone (version web Safari) ; photos géoréférencées Lambert 93, annotation, galerie et carte des photos, exports CSV / ZIP / projet QGIS / Carte HTML avec export PDF ; README illustré |
